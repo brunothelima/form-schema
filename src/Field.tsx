@@ -1,16 +1,20 @@
 import React from 'react'
 
 interface PropsType {
+  id?: string;
   label?: string;
-  htmlFor?: string;
   children?: any;
 }
 
-function Field({ htmlFor, label, children }: PropsType) {
+function Field({ id, label, children }: PropsType) {
 
   return (
     <div className="Field"> 
-      {!!label && <label htmlFor={htmlFor}>{label}</label>}
+      {label !== undefined && 
+        <label htmlFor={id || ''}>
+          {label}
+        </label>
+      }
       {children}
     </div>
   )

@@ -1,23 +1,39 @@
-import React from 'react'
-import { InputType } from './types'
+import React, { useState, useEffect } from 'react'
+import { Form } from './types'
 import Field from './Field'
 
-interface PropsType {
-  schema: InputType[],
-  children?: any
+interface Props {
+  children?: any;
+  schema: Form.Input[];
+  onSubmit: Form.Submit;
 }
 
-function Form({ schema, children }: PropsType) {
+export default function ({schema, children, onSubmit}: Props) {
+
+  const [data, setData] = useState({} as Form.Data) 
+
+  function onChange(name: string, value: any) {
+    setData({...data, [name]: value})
+  }
+
+  useEffect(() => {
+    const map = ({attrs, value}: Form.Input) => {
+      return { [attrs.name]: value || '' }
+    }
+    const reduce = (last: Form.Data, next: Form.Data) => {
+      return { ...last, ...next }
+    }
+    setData(schema.map(map).reduce(reduce))
+  }, [schema])
+
   return (
-    <div className="Form">
-      {schema.map(input =>
-        <Field key={input.id} htmlFor={input.id} label={input.label} >
-          <input.tag {...input} />
+    <form className="Form" onSubmit={ev => onSubmit(ev, data)}>
+      {schema.map(({Input, attrs, field}) => 
+        <Field key={attrs.id} id={attrs.id} {...field} >
+          <Input {...attrs} onChange={onChange} />
         </Field>
       )}
       {children}
-    </div>
+    </form>
   )
 }
-
-export default Form

@@ -1,13 +1,21 @@
-import React from 'react'
-import { InputType } from './types'
+import React, { ChangeEvent } from 'react'
+import { Form } from './types'
 
-interface PropsType extends InputType {
-  children?: any
+type Ev = ChangeEvent<HTMLInputElement>
+
+interface Props extends Form.Attrs {
+  onChange: OnChange;
 }
 
-function InputText(props: PropsType) {
+interface OnChange {
+  (name: string, value: string): void
+}
+
+function InputText({ name, onChange }: Props) {
   return (
-    <input {...props}/>
+    <div className="Input">
+      <input name={name} onChange={ev => onChange(name, ev.target.value)} />
+    </div>
   )
 }
 
