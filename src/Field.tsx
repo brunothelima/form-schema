@@ -7,10 +7,9 @@ interface PropsType {
 }
 
 function Field({ id, label, children }: PropsType) {
-
   return (
-    <div className="Field"> 
-      {label !== undefined && 
+    <div className="Field">
+      {label !== undefined &&
         <label htmlFor={id || ''}>
           {label}
         </label>

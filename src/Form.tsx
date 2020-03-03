@@ -1,39 +1,60 @@
 import React, { useState, useEffect } from 'react'
-import { Form } from './types'
+import * as Validations from './validations'
 import Field from './Field'
 
-interface Props {
+import { 
+  InputType, 
+  DataType, 
+  SubmitEvent, 
+  ChangeEvent, 
+  SuccessEvent 
+} from './types'
+
+interface PropsType {
+  schema: InputType[];
   children?: any;
-  schema: Form.Input[];
-  onSubmit: Form.Submit;
+  onSuccess?: SuccessEvent;
 }
 
-export default function ({schema, children, onSubmit}: Props) {
+function Form ({ schema, children, onSuccess }: PropsType) {
 
-  const [data, setData] = useState({} as Form.Data) 
+  const [data, setData] = useState({} as DataType)
 
-  function onChange(name: string, value: any) {
-    setData({...data, [name]: value})
+  const onChange: ChangeEvent = (name, value) => {
+    setData({ ...data, [name]: value })
+  }
+
+  const onSubmit: SubmitEvent = (ev, data) => {
+    ev.preventDefault()
+    
+    for (const input of schema.values()) {
+    }
+    
+
+    if (onSuccess instanceof Function) {
+      onSuccess(data)
+    }
   }
 
   useEffect(() => {
-    const map = ({attrs, value}: Form.Input) => {
-      return { [attrs.name]: value || '' }
-    }
-    const reduce = (last: Form.Data, next: Form.Data) => {
-      return { ...last, ...next }
-    }
-    setData(schema.map(map).reduce(reduce))
+    setData(() => {
+      const map = ({ attrs, value }: InputType) => ({ [attrs.name]: value || '' })
+      const reduce = (last: DataType, next: DataType) => ({ ...last, ...next })
+      return schema.map(map).reduce(reduce)
+    })
   }, [schema])
 
   return (
     <form className="Form" onSubmit={ev => onSubmit(ev, data)}>
-      {schema.map(({Input, attrs, field}) => 
+      {JSON.stringify(data)}
+      {schema.map(({ Component, attrs, field }) =>
         <Field key={attrs.id} id={attrs.id} {...field} >
-          <Input {...attrs} onChange={onChange} />
+          <Component {...attrs} onChange={onChange} />
         </Field>
       )}
       {children}
     </form>
   )
 }
+
+export default Form

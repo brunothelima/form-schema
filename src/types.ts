@@ -1,30 +1,40 @@
 import { FormEvent, ElementType } from "react";
 
-export namespace Form {
-  
-  export interface Input {
-    Input: ElementType;
-    attrs: Attrs;
-    field?: Field;
-    value?: any,
-  }
+export interface InputType {
+  Component: ElementType;
+  attrs: InputAttrsType;
+  field?: InputFieldType;
+  validations: (string|ValidationType)[]
+  value?: any,
+}
 
-  export interface Field {
-    infos?: string;
-    label?: string;
-  }
+export interface InputFieldType {
+  infos?: string;
+  label?: string;
+}
 
-  export interface Attrs {
-    id?: string;
-    name: string;
-    placeholder?: string | number;
-  }
+export interface InputAttrsType {
+  id?: string;
+  name: string;
+  placeholder?: string | number;
+}
 
-  export interface Data {
-    [name: string]: string;
-  }
+export interface ValidationType {
+  (value: any): boolean
+}
 
-  export interface Submit {
-    (ev: FormEvent<HTMLFormElement>, data: Data): void
-  }
+export interface DataType {
+  [name: string]: string;
+}
+
+export interface ChangeEvent {
+  (name: string, value: string): void
+}
+
+export interface SubmitEvent {
+  (ev: FormEvent<HTMLFormElement>, data: DataType): void
+}
+
+export interface SuccessEvent {
+  (data: DataType): void
 }

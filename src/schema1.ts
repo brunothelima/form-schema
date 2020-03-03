@@ -1,20 +1,28 @@
 import InputText from './InputText'
-import { Form } from './types'
+import { InputType, ValidationType } from './types'
 
-const schema: Form.Input[] = [
+const email: ValidationType = (value: string) => {
+  var regex = /^([^.@]+)(\.[^.@]+)*@([^.@]+\.)+([^.@]+)$/
+  return regex.test(String(value).toLowerCase())
+}
+
+const schema: InputType[] = [
   {
-    Input: InputText,
+    Component: InputText,
     field: { 
-      label: 'First Name',
+      label: 'First Name',      
     },
     attrs: {
       id: 'firstName',
       name: 'first_name',
       placeholder: 'Type your name here'
-    }
+    },
+    validations: [
+      'required'
+    ],
   },
   {
-    Input: InputText,
+    Component: InputText,
     field: {
       label: 'E-mail',
     },
@@ -22,7 +30,11 @@ const schema: Form.Input[] = [
       id: 'emailInput',
       name: 'email',
       placeholder: 'ex: email@example.com'
-    }
+    },
+    validations: [
+      'required',
+      email
+    ]
   }
 ]
 
