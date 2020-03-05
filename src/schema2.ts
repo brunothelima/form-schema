@@ -1,7 +1,7 @@
 import InputText from './InputText'
-import { InputType, ValidationType } from './types'
+import { InputType } from './types'
 
-const email: ValidationType = (value: string) => {
+const emailCheck = (value: string) => {
   var regex = /^([^.@]+)(\.[^.@]+)*@([^.@]+\.)+([^.@]+)$/
   return regex.test(String(value).toLowerCase())
 }
@@ -14,11 +14,11 @@ const schema: InputType[] = [
     },
     attrs: {
       id: 'firstName2',
-      name: 'first_name',
+      name: 'first_name2',
       placeholder: 'Type your name here'
     },
     validations: [
-      'required'
+      { handler: 'required', message: 'Required Input' },
     ]
   },
   {
@@ -28,12 +28,12 @@ const schema: InputType[] = [
     },
     attrs: {
       id: 'emailInput2',
-      name: 'email',
+      name: 'email2',
       placeholder: 'ex: email@example.com'
     },
     validations: [
-      'required',
-      email
+      { handler: 'required', message: 'Required Input' },
+      { handler: emailCheck, message: 'Invalid e-mail' }
     ]
   }
 ]

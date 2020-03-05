@@ -4,15 +4,14 @@ export interface InputType {
   Component: ElementType;
   attrs: InputAttrsType;
   field?: InputFieldType;
-  validations: (string|ValidationType)[]
+  validations: ValidationType[],
   value?: any,
 }
-
 export interface InputFieldType {
   infos?: string;
   label?: string;
+  errors?: string[]
 }
-
 export interface InputAttrsType {
   id?: string;
   name: string;
@@ -20,21 +19,26 @@ export interface InputAttrsType {
 }
 
 export interface ValidationType {
+  message: string,
+  handler: string | ValidationHandlerType
+}
+export interface ValidationHandlerType {
   (value: any): boolean
 }
 
 export interface DataType {
-  [name: string]: string;
+  [inputName: string]: string;
+}
+export interface ErrorsType {
+  [inputName: string]: string[];
 }
 
 export interface ChangeEvent {
-  (name: string, value: string): void
+  (inputName: string, value: string): void
 }
-
 export interface SubmitEvent {
   (ev: FormEvent<HTMLFormElement>, data: DataType): void
 }
-
 export interface SuccessEvent {
   (data: DataType): void
 }

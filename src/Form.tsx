@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import * as Validations from './validations'
+import Validations from './validations'
 import Field from './Field'
 
-import { 
-  InputType, 
-  DataType, 
-  SubmitEvent, 
-  ChangeEvent, 
-  SuccessEvent 
+import {
+  DataType,
+  InputType,
+  ErrorsType,
+  SubmitEvent,
+  ChangeEvent,
+  SuccessEvent,
 } from './types'
 
 interface PropsType {
@@ -16,9 +17,10 @@ interface PropsType {
   onSuccess?: SuccessEvent;
 }
 
-function Form ({ schema, children, onSuccess }: PropsType) {
+function Form({ schema, children, onSuccess }: PropsType) {
 
   const [data, setData] = useState({} as DataType)
+  const [errors, setErrors] = useState({} as ErrorsType)
 
   const onChange: ChangeEvent = (name, value) => {
     setData({ ...data, [name]: value })
@@ -26,17 +28,40 @@ function Form ({ schema, children, onSuccess }: PropsType) {
 
   const onSubmit: SubmitEvent = (ev, data) => {
     ev.preventDefault()
-    
-    for (const input of schema.values()) {
+
+    setErrors({})
+
+    for (const name in data) {
+      const input = schema.find(input => input.attrs.name === name)
+
+      if (input === undefined)
+        continue
+
+      for (const validation of input.validations.values()) {
+
+        let handler = !(validation.handler instanceof Function)
+          ? Validations[validation.handler]
+          : validation.handler
+
+        if (!handler(data[name])) {
+          setErrors(errors => {
+            if (!errors[name]) errors[name] = []
+            errors[name].push(validation.message)
+            return errors
+          })
+        }
+      }
     }
     
-
-    if (onSuccess instanceof Function) {
-      onSuccess(data)
+    if (Object.entries(errors).length) {
+      if (onSuccess instanceof Function) {
+        onSuccess(data)
+      }
     }
   }
 
   useEffect(() => {
+    setErrors({})
     setData(() => {
       const map = ({ attrs, value }: InputType) => ({ [attrs.name]: value || '' })
       const reduce = (last: DataType, next: DataType) => ({ ...last, ...next })
@@ -47,8 +72,10 @@ function Form ({ schema, children, onSuccess }: PropsType) {
   return (
     <form className="Form" onSubmit={ev => onSubmit(ev, data)}>
       {JSON.stringify(data)}
+      <br />
+      {JSON.stringify(errors)}
       {schema.map(({ Component, attrs, field }) =>
-        <Field key={attrs.id} id={attrs.id} {...field} >
+        <Field key={attrs.id} id={attrs.id} {...field} errors={errors[attrs.name]} >
           <Component {...attrs} onChange={onChange} />
         </Field>
       )}

@@ -1,12 +1,12 @@
 import React from 'react'
+import { InputFieldType } from './types'
 
-interface PropsType {
-  id?: string;
-  label?: string;
+interface PropsType extends InputFieldType {
+  id?: string,
   children?: any;
 }
 
-function Field({ id, label, children }: PropsType) {
+function Field({ id, label, errors, children }: PropsType) {
   return (
     <div className="Field">
       {label !== undefined &&
@@ -15,6 +15,13 @@ function Field({ id, label, children }: PropsType) {
         </label>
       }
       {children}
+      {errors?.length && 
+        <ul className="Field__errors">
+          {errors?.map((error, index) => 
+            <li key={`${id}_${index}`}>{error}</li>
+          )}
+        </ul>
+      }
     </div>
   )
 }
