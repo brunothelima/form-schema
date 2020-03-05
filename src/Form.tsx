@@ -36,6 +36,9 @@ function Form({ schema, children, onSuccess }: PropsType) {
 
       if (input === undefined)
         continue
+      
+      if (input.validations === undefined)
+        continue
 
       for (const validation of input.validations.values()) {
 
@@ -71,12 +74,12 @@ function Form({ schema, children, onSuccess }: PropsType) {
 
   return (
     <form className="Form" onSubmit={ev => onSubmit(ev, data)}>
-      {JSON.stringify(data)}
-      <br />
-      {JSON.stringify(errors)}
-      {schema.map(({ Component, attrs, field }) =>
-        <Field key={attrs.id} id={attrs.id} {...field} errors={errors[attrs.name]} >
-          <Component {...attrs} onChange={onChange} />
+      {schema.map(({ Component, attrs, events, field }) =>
+        <Field key={attrs.id} id={attrs.id} errors={errors[attrs.name]} {...field}>
+          <Component {...attrs} 
+            onChange={onChange}
+            {...events} 
+          />
         </Field>
       )}
       {children}

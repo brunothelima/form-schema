@@ -1,14 +1,16 @@
 import React from 'react'
-import { InputAttrsType, ChangeEvent } from './types'
+import { InputAttrsType, InputEventsType } from './types'
 
-interface PropsType extends InputAttrsType {
-  onChange: ChangeEvent;
-}
+interface PropsType extends InputAttrsType, InputEventsType {}
 
-function InputText({ name, onChange }: PropsType) {
+function InputText({ name, onChange, onFocus, onBlur }: PropsType) {
   return (
     <div className="Input">
-      <input name={name} onChange={ev => onChange(name, ev.target.value)} />
+      <input name={name} 
+        onBlur={ev => onBlur && onBlur(name, ev.target.value)} 
+        onFocus={ev => onFocus && onFocus(name, ev.target.value)} 
+        onChange={ev => onChange && onChange(name, ev.target.value)} 
+      />
     </div>
   )
 }

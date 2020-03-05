@@ -4,7 +4,8 @@ export interface InputType {
   Component: ElementType;
   attrs: InputAttrsType;
   field?: InputFieldType;
-  validations: ValidationType[],
+  validations?: InputValidationType[],
+  events?: InputEventsType,
   value?: any,
 }
 export interface InputFieldType {
@@ -18,11 +19,17 @@ export interface InputAttrsType {
   placeholder?: string | number;
 }
 
-export interface ValidationType {
-  message: string,
-  handler: string | ValidationHandlerType
+export interface InputEventsType {
+  onChange?: ChangeEvent;
+  onFocus?: FocusEvent;
+  onBlur?: BlurEvent;
 }
-export interface ValidationHandlerType {
+
+export interface InputValidationType {
+  message: string,
+  handler: string | InputValidationHandlerType
+}
+export interface InputValidationHandlerType {
   (value: any): boolean
 }
 
@@ -36,6 +43,13 @@ export interface ErrorsType {
 export interface ChangeEvent {
   (inputName: string, value: string): void
 }
+export interface FocusEvent {
+  (inputName: string, value: string): void
+}
+export interface BlurEvent {
+  (inputName: string, value: string): void
+}
+
 export interface SubmitEvent {
   (ev: FormEvent<HTMLFormElement>, data: DataType): void
 }

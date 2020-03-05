@@ -31,6 +31,11 @@ const schema: InputType[] = [
       name: 'email',
       placeholder: 'ex: email@example.com'
     },
+    events: {
+      onFocus: (name, value) => {
+        
+      },
+    },
     validations: [
       { handler: 'required', message: 'Required Input' },
       { handler: emailCheck, message: 'Invalid e-mail' }
