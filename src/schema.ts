@@ -1,17 +1,18 @@
-const emailCheck = (value) => {
+import { Schema, ValidationHandler } from "./types"
+
+const emailCheck: ValidationHandler = value => {
   var regex = /^([^.@]+)(\.[^.@]+)*@([^.@]+\.)+([^.@]+)$/
   return regex.test(String(value).toLowerCase())
 }
 
-export default {
+const schema: Schema =  {
   name: {
     id: 'nameID',
     className: 'asdasd',
     events: {
       onChange: (ev, { dispatch }) => {
-        const { value } = ev.target
-        dispatch(schema => {
-          schema.email.value = value
+        dispatch && dispatch(schema => {
+          schema['email'].value = ev.target.value
           return { ...schema }
         })
       },
@@ -31,3 +32,5 @@ export default {
     }
   },
 }
+
+export default schema

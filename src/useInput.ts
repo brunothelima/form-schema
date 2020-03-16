@@ -1,9 +1,15 @@
+import { ChangeEvent } from 'react'
+import { Input } from './types'
 
-export default function useInput(input) {
+interface UseInput extends Input {
+  name: string;
+}
+
+export const useInput = (input: UseInput) => {
 
   const { name, value, events, dispatch } = input
   
-  function onChange(ev) {
+  const onChange = (ev: ChangeEvent<HTMLInputElement>) => {
     ev.persist()
   
     dispatch && dispatch(schema => {
