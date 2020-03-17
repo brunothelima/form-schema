@@ -14,17 +14,13 @@ export interface Input {
   dispatch?: Dispatch<SetStateAction<Schema>>;
 }
 
-
-
-export interface Events extends InputEvents {}
+export interface Events extends InputEvents { }
 export interface InputEvents {
   onChange: InputChangeEvent
 }
 export interface InputChangeEvent {
-  (ev: ChangeEvent<HTMLInputElement>, input: Input): void
+  (ev: ChangeEvent<FormElements>, input: Input): void
 }
-
-
 
 export interface Validations {
   [validationName: string]: Validation | string;
@@ -37,12 +33,15 @@ export interface ValidationHandler {
   (value: any): boolean
 }
 
-
+export type FormElements = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
 
 export interface FormSubmitEvent {
-  (ev: FormEvent<HTMLFormElement>): void
+  (ev: FormEvent<HTMLFormElement>): void;
+}
+export interface FormSuccessEvent {
+  (data: Data): void;
 }
 
-export interface FormSuccessEvent {
-  (ev: FormEvent<HTMLFormElement>): void
+export interface Data {
+  [inputName: string]: any;
 }

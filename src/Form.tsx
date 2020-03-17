@@ -11,23 +11,20 @@ interface Props {
 
 function Form(props: Props) {
 
-  const { schema, dispatch, validate, hasError } = useSchema(props.schema)
-
+  const { schema, dispatch, validate, errors, data } = useSchema(props.schema)
   const onSubmit: FormSubmitEvent = ev => {
     ev.preventDefault()
 
     validate()
 
-    if (hasError())
-      return
-
-    props.onSuccess
-      && props.onSuccess(ev)
+    if (!Object.keys(errors).length) {
+      props.onSuccess && props.onSuccess(data)
+    }
   }
 
   return (
     <form onSubmit={onSubmit}>
-      {JSON.stringify(schema)}
+      {JSON.stringify(errors)}
       {Object.keys(schema).map(name =>
         <div className="field" key={name}>
           <InputText name={name} {...schema[name]} dispatch={dispatch} />

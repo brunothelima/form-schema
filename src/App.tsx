@@ -1,11 +1,12 @@
 import React from 'react'
 import Form from './Form'
 import schema from './schema'
+import { Data } from './types'
 
 function App() {
 
-  function onSuccess() {
-    console.log('success')
+  function onSuccess(data: Data) {
+    console.log(data)
   }
 
   return (

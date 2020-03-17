@@ -1,15 +1,15 @@
 import { ChangeEvent } from 'react'
-import { Input } from './types'
+import { Input, FormElements } from './types'
 
-interface UseInput extends Input {
+interface UseInputArgs extends Input {
   name: string;
 }
 
-export const useInput = (input: UseInput) => {
+export const useInput = (input: UseInputArgs) => {
 
   const { name, value, events, dispatch } = input
   
-  const onChange = (ev: ChangeEvent<HTMLInputElement>) => {
+  const onChange = (ev: ChangeEvent<FormElements>) => {
     ev.persist()
   
     dispatch && dispatch(schema => {
@@ -17,8 +17,7 @@ export const useInput = (input: UseInput) => {
       return { ...schema }
     })
   
-    events?.onChange 
-      && events.onChange(ev, input)
+    events?.onChange && events.onChange(ev, input)
   }
 
   return {
